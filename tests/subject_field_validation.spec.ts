@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("Verify that the subjects input field accepts multiple subjects and displays them correctly", async ({
+test("TSubject input field should accepts multiple subjects and displays them correctly", async ({
   page,
 }) => {
   // Navigate to the form page.
@@ -21,7 +21,7 @@ test("Verify that the subjects input field accepts multiple subjects and display
   ).toBeVisible();
 });
 
-test("Verify that the subjects input field does not accept invalid subjects", async ({
+test("Subject input field should not accept invalid subjects", async ({
   page,
 }) => {
   // Navigate to the form page.
@@ -39,7 +39,7 @@ test("Verify that the subjects input field does not accept invalid subjects", as
   ).not.toBeVisible();
 });
 
-test("Verify that the subjects input field can remove selected subjects", async ({
+test("Subject input field should allow users to remove selected subjects", async ({
   page,
 }) => {
   // Navigate to the form page.

@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 
 // Boundary value analysis for birth date field validation
-test("Submit should fail with invalid birth date(Today date)", async ({
+test("Submission should fail with invalid birth date(Today date)", async ({
   page,
 }) => {
   // Navigate to the form page.
@@ -41,7 +41,7 @@ test("Submit should fail with invalid birth date(Today date)", async ({
   ).not.toBeVisible();
 });
 
-test("Submit should succeed with valid birth date(Past Date)", async ({
+test("Submission should succeed with valid birth date(Past Date)", async ({
   page,
 }) => {
   // Navigate to the form page.
@@ -81,7 +81,7 @@ test("Submit should succeed with valid birth date(Past Date)", async ({
   ).toBeVisible();
 });
 
-test("Submit should fail with invalid birth date(Future Date)", async ({
+test("Submission should fail with invalid birth date(Future Date)", async ({
   page,
 }) => {
   // Navigate to the form page.
