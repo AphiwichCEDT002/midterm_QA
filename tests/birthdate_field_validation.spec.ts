@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 
-test("Verify that the City dropdown field is empty if no State is selected or the selected State is cleared", async ({
+// Boundary value analysis for birth date field validation
+test("Submit should fail with invalid birth date(Today date)", async ({
   page,
 }) => {
   // Navigate to the form page.
@@ -9,6 +10,12 @@ test("Verify that the City dropdown field is empty if no State is selected or th
     page.getByRole("heading", { name: "Practice Form" }),
   ).toBeVisible();
 
+  var date = new Date();
+  var day = date.getDate();
+  var month = date.toLocaleString("default", { month: "short" });
+  var year = date.getFullYear();
+  var today_date = `${day} ${month} ${year}`;
+
   // Fill the form
   await page.getByTestId("firstName").fill("John");
   await page.getByTestId("lastName").fill("Doe");
@@ -16,25 +23,25 @@ test("Verify that the City dropdown field is empty if no State is selected or th
   await page.getByTestId("gender-radio-1").check();
   await page.getByTestId("userNumber").fill("1234567890");
   await page.getByTestId("dateOfBirthInput").click();
-  await page.getByTestId("dateOfBirthInput").fill("15 Mar 2026");
+  await page.getByTestId("dateOfBirthInput").fill(today_date);
   await page.keyboard.press("Enter");
   await page.getByTestId("subjectsInput").fill("Computer Science");
   await page.keyboard.press("Enter");
   await page.getByTestId("hobbies-checkbox-2").check();
   await page.getByTestId("currentAddress").fill("123 Main St, Anytown, USA");
-
-  // Verify that the city dropdown options are correct based on the selected state.
-  await expect(page.getByTestId("react-select-4-placeholder")).toHaveText(
-    "Select City",
-  );
   await page.getByTestId("state").click();
   await page.getByRole("option", { name: "NCR" }).click();
-  await expect(page.getByTestId("react-select-4-placeholder")).toHaveText(
-    "Select City",
-  );
+  await page.getByTestId("city").click();
+  await page.getByRole("option", { name: "Delhi" }).click();
+  await page.getByTestId("submit").click();
+
+  // Verify that the form submission fails with the invalid birth date.
+  await expect(
+    page.getByText("Thanks for submitting the form", { exact: true }),
+  ).not.toBeVisible();
 });
 
-test("Verify that the City dropdown options do not change if the selected State is not changed", async ({
+test("Submit should succeed with valid birth date(Past Date)", async ({
   page,
 }) => {
   // Navigate to the form page.
@@ -43,6 +50,12 @@ test("Verify that the City dropdown options do not change if the selected State 
     page.getByRole("heading", { name: "Practice Form" }),
   ).toBeVisible();
 
+  var date = new Date();
+  var day = date.getDate();
+  var month = date.toLocaleString("default", { month: "short" });
+  var year = date.getFullYear() - 20;
+  var today_date = `${day} ${month} ${year}`;
+
   // Fill the form
   await page.getByTestId("firstName").fill("John");
   await page.getByTestId("lastName").fill("Doe");
@@ -50,26 +63,25 @@ test("Verify that the City dropdown options do not change if the selected State 
   await page.getByTestId("gender-radio-1").check();
   await page.getByTestId("userNumber").fill("1234567890");
   await page.getByTestId("dateOfBirthInput").click();
-  await page.getByTestId("dateOfBirthInput").fill("15 Mar 2026");
+  await page.getByTestId("dateOfBirthInput").fill(today_date);
   await page.keyboard.press("Enter");
   await page.getByTestId("subjectsInput").fill("Computer Science");
   await page.keyboard.press("Enter");
   await page.getByTestId("hobbies-checkbox-2").check();
   await page.getByTestId("currentAddress").fill("123 Main St, Anytown, USA");
+  await page.getByTestId("state").click();
+  await page.getByRole("option", { name: "NCR" }).click();
+  await page.getByTestId("city").click();
+  await page.getByRole("option", { name: "Delhi" }).click();
+  await page.getByTestId("submit").click();
 
-  // Verify that the city dropdown options are correct based on the selected state.
-  await page.getByTestId("state").click();
-  await page.getByRole("option", { name: "NCR" }).click();
-  await page.getByTestId("city").click();
-  await expect(page.getByRole("option", { name: "Delhi" })).toBeVisible();
-  await page.getByTestId("state").click();
-  await page.getByRole("option", { name: "NCR" }).click();
-  await page.getByTestId("city").click();
-  await expect(page.getByRole("option", { name: "Delhi" })).toBeVisible();
+  // Verify that the form submission fails with the invalid birth date.
+  await expect(
+    page.getByText("Thanks for submitting the form", { exact: true }),
+  ).toBeVisible();
 });
 
-// Equivalence partitioning for city dropdown options based on state selection
-test("City dropdown options should not allow invalid values if user fill city from other state", async ({
+test("Submit should fail with invalid birth date(Future Date)", async ({
   page,
 }) => {
   // Navigate to the form page.
@@ -78,37 +90,11 @@ test("City dropdown options should not allow invalid values if user fill city fr
     page.getByRole("heading", { name: "Practice Form" }),
   ).toBeVisible();
 
-  // Fill the form
-  await page.getByTestId("firstName").fill("John");
-  await page.getByTestId("lastName").fill("Doe");
-  await page.getByTestId("userEmail").fill("Aphiwich@email.com");
-  await page.getByTestId("gender-radio-1").check();
-  await page.getByTestId("userNumber").fill("1234567890");
-  await page.getByTestId("dateOfBirthInput").click();
-  await page.getByTestId("dateOfBirthInput").fill("15 Mar 2026");
-  await page.keyboard.press("Enter");
-  await page.getByTestId("subjectsInput").fill("Computer Science");
-  await page.keyboard.press("Enter");
-  await page.getByTestId("hobbies-checkbox-2").check();
-  await page.getByTestId("currentAddress").fill("123 Main St, Anytown, USA");
-
-  // Verify that the city dropdown options are correct based on the selected state.
-  await page.getByTestId("state").click();
-  await page.getByRole("option", { name: "Haryana" }).click();
-  await page.getByTestId("city").click();
-  await page.getByTestId("react-select-4-input").fill("Delhi");
-  await expect(page.getByRole("option", { name: "Delhi" })).not.toBeVisible();
-  await expect(page.getByText("No options", { exact: true })).toBeVisible();
-});
-
-test("City dropdown options should allow valid values if user fill city from correct state", async ({
-  page,
-}) => {
-  // Navigate to the form page.
-  await page.goto("https://demoqa.com/automation-practice-form");
-  await expect(
-    page.getByRole("heading", { name: "Practice Form" }),
-  ).toBeVisible();
+  var date = new Date();
+  var day = date.getDate();
+  var month = date.toLocaleString("default", { month: "short" });
+  var year = date.getFullYear() + 20;
+  var today_date = `${day} ${month} ${year}`;
 
   // Fill the form
   await page.getByTestId("firstName").fill("John");
@@ -117,17 +103,19 @@ test("City dropdown options should allow valid values if user fill city from cor
   await page.getByTestId("gender-radio-1").check();
   await page.getByTestId("userNumber").fill("1234567890");
   await page.getByTestId("dateOfBirthInput").click();
-  await page.getByTestId("dateOfBirthInput").fill("15 Mar 2026");
+  await page.getByTestId("dateOfBirthInput").fill(today_date);
   await page.keyboard.press("Enter");
   await page.getByTestId("subjectsInput").fill("Computer Science");
   await page.keyboard.press("Enter");
   await page.getByTestId("hobbies-checkbox-2").check();
   await page.getByTestId("currentAddress").fill("123 Main St, Anytown, USA");
-
-  // Verify that the city dropdown options are correct based on the selected state.
   await page.getByTestId("state").click();
   await page.getByRole("option", { name: "NCR" }).click();
   await page.getByTestId("city").click();
-  await page.getByTestId("react-select-4-input").fill("Delhi");
-  await expect(page.getByRole("option", { name: "Delhi" })).toBeVisible();
+  await page.getByRole("option", { name: "Delhi" }).click();
+  await page.getByTestId("submit").click();
+  // Verify that the form submission fails with the invalid birth date.
+  await expect(
+    page.getByText("Thanks for submitting the form", { exact: true }),
+  ).not.toBeVisible();
 });
