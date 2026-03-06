@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 
-test("TSubject input field should accepts multiple subjects and displays them correctly", async ({
+test("Subject input field should accepts multiple subjects and displays them correctly", async ({
   page,
 }) => {
   // Navigate to the form page.
