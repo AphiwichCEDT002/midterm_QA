@@ -36,11 +36,11 @@ test("Verify that the submission modal correctly displays the exact data entered
   // Verify that the submission modal correctly displays the exact data entered in the form.
     await expect(page.getByText("John Doe", { exact: true })).toBeVisible();
     await expect(page.getByText("Aphiwich@email.com", { exact: true })).toBeVisible();
-    await expect(page.getByText("Male", { exact: true })).toBeVisible();
+    await expect(page.locator('.table-responsive').getByRole('cell', { name: 'Male', exact: true })).toBeVisible();
     await expect(page.getByText("1234567890", { exact: true })).toBeVisible();
     await expect(page.getByText("15 March,2026", { exact: true })).toBeVisible();
-    await expect(page.getByText("Computer Science", { exact: true })).toBeVisible();
-    await expect(page.getByText("Reading", { exact: true })).toBeVisible();
+    await expect(page.locator('.table-responsive').getByRole('cell', { name: 'Computer Science', exact: true })).toBeVisible();
+    await expect(page.locator('.table-responsive').getByRole('cell', { name: 'Reading', exact: true })).toBeVisible();
     await expect(page.getByText("123 Main St, Anytown, USA", { exact: true })).toBeVisible();
     await expect(page.getByText("NCR Delhi", { exact: true })).toBeVisible();
 

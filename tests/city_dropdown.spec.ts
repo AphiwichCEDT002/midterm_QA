@@ -24,12 +24,10 @@ test("Verify that the City dropdown field is empty if no State is selected or th
   await page.getByTestId("currentAddress").fill("123 Main St, Anytown, USA");
 
   // Verify that the city dropdown options are correct based on the selected state.
-  // await expect(
-  //   page.getByRole("option", { name: "Select State" , exact: true }),
-  // ).toBeVisible();
-  // await page.getByTestId("state").click();
-  // await page.getByRole("option", { name: "NCR" }).click();
-  // await expect(page.getByRole("option", { name: "Select City" , exact: true })).toBeVisible();
+  await expect(page.getByTestId("react-select-4-placeholder" )).toHaveText("Select City");
+  await page.getByTestId("state").click();
+  await page.getByRole("option", { name: "NCR" }).click();
+  await expect(page.getByTestId("react-select-4-placeholder" )).toHaveText("Select City");
 });
 
 test("Verify that the City dropdown options do not change if the selected State is not changed", async ({

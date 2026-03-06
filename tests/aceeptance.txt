@@ -5,11 +5,11 @@ Acceptance Criteria
 4. Verify that the "Subjects" field allows multiple entries and displays them as removable tags.//
 5. Verify that the submission modal correctly displays the exact data entered in the form. //
 6. Field Validation:
-6.1 Mobile: Must be exactly 10 digits. Alphabetic characters or special symbols are not
+6.1 Mobile: Must be exactly 10 digits. Alphabetic characters or special symbols are not //
 permitted.
-6.2 Email: Must contain "@" and a valid domain extension.
+6.2 Email: Must contain "@" and a valid domain extension. // 
 6.3 Date of Birth: The field should default to the current system date but allow manual
-selection via a calendar widget.
+selection via a calendar widget.//
 7. Dynamic Dropdowns: The "City" dropdown must remain disabled or empty until a "State" is selected.
-Upon state selection, only cities belonging to that state shall be displayed.
+Upon state selection, only cities belonging to that state shall be displayed.//
 
